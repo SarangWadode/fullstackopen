@@ -1,0 +1,15 @@
+import Part from "./part";
+
+const Content = ({ parts }) => {
+  const sum = parts.reduce((sum, part) => sum = sum + part.exercises, 0);
+  return (
+    <div>
+      {parts.map((part) => (
+        <Part key={part.id} name={part.name} exercises={part.exercises} />
+      ))}
+      <p><strong>total of {sum} exercises</strong></p>
+    </div>
+  );
+};
+
+export default Content;
