@@ -1,13 +1,11 @@
-const Persons = ({ persons, filterVal }) => {
-    const filter = (filterVal === '') ?
-    persons.map((person) => <div key={person.id}>{person.name} {person.number}</div>) :
-    persons.filter((person) => person.name.toLowerCase().includes(filterVal.toLowerCase())).map((person) => <div key={person.id}>{person.name} {person.number}</div>)
+import Person from "./person";
 
-    return (
-        <div>
-            {filter}
-        </div>
-    )
-}
+const Persons = ({ persons, filterVal, handleDelete }) => {
+  const filter =
+    filterVal === ""
+      ? persons.map((person) => <Person key={person.id} person={person} handleDelete={handleDelete} />)
+      : persons.filter((person) => person.name.toLowerCase().includes(filterVal.toLowerCase())).map((person) => <Person key={person.id} person={person} handleDelete={handleDelete} />);
+  return <div>{filter}</div>;
+};
 
 export default Persons;

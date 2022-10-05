@@ -52,6 +52,20 @@ const App = () => {
     setFilterVal(e.target.value);
   };
 
+  const handleDelete = (e) => {
+    const id = parseInt(e.target.id)
+    const person = persons.find(person => person.id === id)
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      const newPersons = persons.filter(person => person.id !== id)
+      personService
+        .del(id)
+        .then(() => {
+          setPersons([...newPersons])
+        })
+    }
+
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -69,7 +83,7 @@ const App = () => {
         handleChangeNumber={handleChangeNumber}
       />
       <h2>Numbers </h2>
-      <Persons persons={persons} filterVal={filterVal} />
+      <Persons persons={persons} filterVal={filterVal} handleDelete={handleDelete} />
     </div>
   );
 };
