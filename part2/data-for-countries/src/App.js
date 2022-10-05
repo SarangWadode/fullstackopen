@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Country from "./components/country";
+import Countries from "./components/countries";
 
 const App = () => {
   const [countries, setCountries] = useState([]);
@@ -21,31 +23,16 @@ const App = () => {
       .includes(findCoutry.toLocaleLowerCase());
   });
 
+
   const filterLimit =
     filter.length > 11 ? (
       "Too many matches, specify another filter"
     ) : filter.length === 1 ? (
-      <div>
-        <h2>{filter[0].name.common}</h2>
-        <div>
-          <p>capital {filter[0].capital}</p>
-          <p>area {filter[0].area}</p>
-        </div>
-        <div>
-          <b>languages</b>
-          <ul>
-            {Object.values(filter[0].languages).map((lang, i) => (
-              <li key={i}>{lang}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <img src={filter[0].flags.png} alt="flag" />
-        </div>
-        {console.log(filter[0])}
-      </div>
+      <Country country={filter[0]} />
     ) : (
-      filter.map((country, i) => <div key={i}>{country.name.common}</div>)
+      filter.map((country, i) => {
+        return <Countries key={i} country={country} />;
+      })
     );
 
   return (
