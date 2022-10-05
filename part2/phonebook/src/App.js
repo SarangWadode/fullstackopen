@@ -2,46 +2,42 @@ import { useState, useEffect } from "react";
 import PersonForm from "./components/personForm";
 import Persons from "./components/persons";
 import Filter from "./components/filter";
-import axios from "axios";
+import personService from "./services/person";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  
-  useEffect(() => {
-    console.log("fetching data");
-    axios
-      .get("http://localhost:3001/persons")
-      .then((res) => {
-        console.log("promise fullfilled");
-        setPersons(res.data);
-    });
-  }, []);
-
   const [newName, setNewName] = useState("");
   const [number, setNumber] = useState("");
   const [filterVal, setFilterVal] = useState("");
+
+  useEffect(() => {
+    personService
+      .getAll()
+        .then((res) => {
+          setPersons(res.data);
+        });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const newPerson = {
       name: newName,
       number: number,
-      id: persons.length + 1,
     };
 
-    const check = persons.filter((person) => {
-      return person.name === newName;
-    });
+    const check = persons.find(({ name }) => name === newName);
 
-    if (check.length > 0) {
+    if (check) {
       alert(`${newName} is already added to phonebook`);
     } else {
-      setPersons([...persons, newPerson]);
+      personService
+        .create(newPerson)
+        .then((res) => {
+          setPersons([...persons, res.data]);
+          setNewName("");
+          setNumber("");
+        });
     }
-    console.log(check.length);
-
-    setNewName("");
-    setNumber("");
   };
 
   const handleChangeName = (e) => {
@@ -72,7 +68,7 @@ const App = () => {
         handleChangeName={handleChangeName}
         handleChangeNumber={handleChangeNumber}
       />
-      <h2>Numbers" </h2>
+      <h2>Numbers </h2>
       <Persons persons={persons} filterVal={filterVal} />
     </div>
   );

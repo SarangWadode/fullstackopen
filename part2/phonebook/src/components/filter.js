@@ -1,14 +1,10 @@
-const Filter = ({value, handleChangeFilter, persons}) => {
-    // console.log(persons)
-    return (
-        <div>
-            <div>
-                filter with:
-                <input onChange={handleChangeFilter} value={value} />
-            </div>
-            {/* {persons.filter} */}
-        </div>
-    )
-}
+const Filter = ({ value, handleChangeFilter }) => {
+  return (
+    <div>
+      filter with:
+      <input onChange={handleChangeFilter} value={value} />
+    </div>
+  );
+};
 
 export default Filter;
