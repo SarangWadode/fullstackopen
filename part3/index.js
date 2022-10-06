@@ -1,6 +1,6 @@
-const { json } = require("express");
 const express = require("express");
 const app = express();
+const morgan = require("morgan");
 
 let persons = [
   {
@@ -44,22 +44,28 @@ const generateId = () => {
   return maxId;
 };
 
+morgan.token('person', (req,res) => {
+  return JSON.stringify(req.body)
+})
+
+app.use(morgan(':method :url :status :res[content-length] :response-time ms :person'))
+
 app.post("/api/persons", (req, res) => {
   const person = req.body;
   person.id = generateId();
-  
-  console.log(person.name, person.number)
-  
+
+  console.log(person.name, person.number);
+
   if (!person.name || !person.number) {
     return res.status(404).json({
-      error: 'name or number is missing'
-    })
+      error: "name or number is missing",
+    });
   }
-  const find = persons.find(p => p.name === person.name)
+  const find = persons.find((p) => p.name === person.name);
   if (find) {
     return res.status(404).json({
-      error: "name must be unique"
-    })
+      error: "name must be unique",
+    });
   }
   persons = persons.concat(person);
 
