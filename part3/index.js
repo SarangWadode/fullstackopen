@@ -25,13 +25,33 @@ let persons = [
   {
     id: 5,
     name: "Sarang Wadode",
-    number: "546446"
-  }
+    number: "546446",
+  },
 ];
 
-app.get('/api/persons', (req,res) => {
-    res.json(persons)
-})
+app.get("/api/persons", (req, res) => {
+  res.json(persons);
+});
+
+app.get("/info", (req, res) => {
+  const totalPersons = `PhoneBook has info for ${persons.length} people`;
+  const date = Date(Date.now());
+  res.send(`<div>
+    <p>${totalPersons}</p>
+    <p>${date}</>
+    </div>`);
+});
+
+app.get("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const person = persons.find((person) => person.id === id);
+
+  if (person) {
+    res.json(person);
+  } else {
+    res.status(404).end()
+  }
+});
 
 const PORT = 3001;
 app.listen(PORT, () => {
