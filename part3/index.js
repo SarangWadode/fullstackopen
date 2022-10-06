@@ -1,3 +1,4 @@
+const { json } = require("express");
 const express = require("express");
 const app = express();
 
@@ -29,7 +30,39 @@ let persons = [
   },
 ];
 
+app.use(express.json());
+
 app.get("/api/persons", (req, res) => {
+  res.json(persons);
+});
+
+const generateId = () => {
+  const maxId =
+    persons.length > 0
+      ? Math.max(...persons.map((person) => person.id)) + 1
+      : 0;
+  return maxId;
+};
+
+app.post("/api/persons", (req, res) => {
+  const person = req.body;
+  person.id = generateId();
+  
+  console.log(person.name, person.number)
+  
+  if (!person.name || !person.number) {
+    return res.status(404).json({
+      error: 'name or number is missing'
+    })
+  }
+  const find = persons.find(p => p.name === person.name)
+  if (find) {
+    return res.status(404).json({
+      error: "name must be unique"
+    })
+  }
+  persons = persons.concat(person);
+
   res.json(persons);
 });
 
@@ -49,7 +82,18 @@ app.get("/api/persons/:id", (req, res) => {
   if (person) {
     res.json(person);
   } else {
-    res.status(404).end()
+    res.status(404).end();
+  }
+});
+
+app.post("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const person = persons.find((person) => person.id === id);
+  if (person) {
+    const updatedPersons = persons.filter((person) => person.id !== id);
+    res.json(updatedPersons);
+  } else {
+    res.status(404).end();
   }
 });
 
