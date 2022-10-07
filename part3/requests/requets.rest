@@ -1,4 +1,4 @@
-GET https://glacial-cove-33885.herokuapp.com/api/persons
+GET https://shy-moon-8318.fly.dev/api/persons
 
 ###
 
