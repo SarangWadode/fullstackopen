@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+const cors = require("cors");
 
 let persons = [
   {
@@ -30,6 +31,7 @@ let persons = [
   },
 ];
 
+app.use(cors());
 app.use(express.json());
 
 app.get("/api/persons", (req, res) => {
@@ -44,11 +46,13 @@ const generateId = () => {
   return maxId;
 };
 
-morgan.token('person', (req,res) => {
-  return JSON.stringify(req.body)
-})
+morgan.token("person", (req, res) => {
+  return JSON.stringify(req.body);
+});
 
-app.use(morgan(':method :url :status :res[content-length] :response-time ms :person'))
+app.use(
+  morgan(":method :url :status :res[content-length] :response-time ms :person")
+);
 
 app.post("/api/persons", (req, res) => {
   const person = req.body;
@@ -103,7 +107,7 @@ app.post("/api/persons/:id", (req, res) => {
   }
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
