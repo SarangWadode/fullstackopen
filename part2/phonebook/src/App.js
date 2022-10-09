@@ -105,9 +105,11 @@ const App = () => {
   };
 
   const handleDelete = (e) => {
-    const id = parseInt(e.target.id);
+    const id = e.target.id;
     const person = persons.find((person) => person.id === id);
-    if (window.confirm(`Delete ${person.name} ?`)) {
+    const name = person.name
+    console.log(persons)
+    if (window.confirm(`Delete ${name} ?`)) {
       const newPersons = persons.filter((person) => person.id !== id);
       personService
         .del(id)
@@ -116,7 +118,7 @@ const App = () => {
         })
         .catch((err) => {
           setNotification({
-            message: `Information of ${person.name} has been already deleted from the server`,
+            message: `Information of ${name} has been already deleted from the server`,
             type: "error",
           });
 
