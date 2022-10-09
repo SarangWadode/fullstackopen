@@ -20,3 +20,15 @@ Content-Type: application/json
     "name": "ramesh",
     "number": "456464"
 }
+
+###
+DELETE http://localhost:3001/api/persons/63424fc3228b8a7e4ff79196
+
+###
+PUT http://localhost:3001/api/persons/634242e14ff134f8449055df
+Content-Type: application/json
+
+{
+    "name": "sarang",
+    "number": "9764466799"
+}
