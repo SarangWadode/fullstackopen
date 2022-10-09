@@ -58,23 +58,25 @@ const App = () => {
         });
       }
     } else {
-      personService.create(newPerson).then((res) => {
-        setPersons([...persons, res.data]);
-        setNewName("");
-        setNumber("");
+      personService
+        .create(newPerson)
+        .then((res) => {
+          setPersons([...persons, res.data]);
+          setNewName("");
+          setNumber("");
 
-        setNotification({
-          message: `Added ${newPerson.name}`,
-          type: "notification",
-        });
-
-        setTimeout(() => {
           setNotification({
-            message: null,
-            type: null,
+            message: `Added ${newPerson.name}`,
+            type: "notification",
           });
-        }, 5000)
-        
+
+          setTimeout(() => {
+            setNotification({
+              message: null,
+              type: null,
+            });
+          }, 5000);
+        })
         .catch((err) => {
           setNotification({
             message: `${err.response.data.error}`,
@@ -88,7 +90,6 @@ const App = () => {
             });
           }, 5000);
         });
-      });
     }
   };
 
@@ -107,8 +108,8 @@ const App = () => {
   const handleDelete = (e) => {
     const id = e.target.id;
     const person = persons.find((person) => person.id === id);
-    const name = person.name
-    console.log(persons)
+    const name = person.name;
+    console.log(persons);
     if (window.confirm(`Delete ${name} ?`)) {
       const newPersons = persons.filter((person) => person.id !== id);
       personService
