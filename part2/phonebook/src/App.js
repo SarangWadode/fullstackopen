@@ -39,23 +39,37 @@ const App = () => {
           ...check,
           number: number,
         };
-        personService.update(check.id, newPerson).then((res) => {
-          const filter = persons.filter((person) => person.id !== check.id);
-          setPersons([...filter, res.data]);
-          setNewName("");
-          setNumber("");
+        personService.update(check.id, newPerson)
+          .then((res) => {
+            const filter = persons.filter((person) => person.id !== check.id);
+            setPersons([...filter, res.data]);
+            setNewName("");
+            setNumber("");
 
-          setNotification({
-            message: `${newPerson.name}'s number changed to ${newPerson.number}`,
-            type: "notification",
-          });
-          setTimeout(() => {
             setNotification({
-              message: null,
-              type: null,
+              message: `${newPerson.name}'s old number has been updated to ${newPerson.number}.`,
+              type: "notification",
             });
-          }, 5000);
-        });
+            setTimeout(() => {
+              setNotification({
+                message: null,
+                type: null,
+              });
+            }, 5000);
+          })
+          .catch(error => {
+            // console.log(error.response.data.error)
+            setNotification({
+              message: error.response.data.error,
+              type: 'error'
+            })
+            setTimeout(() => {
+              setNotification({
+                message: null,
+                type: null,
+              })
+            }, 5000);
+          });
       }
     } else {
       personService
@@ -66,7 +80,7 @@ const App = () => {
           setNumber("");
 
           setNotification({
-            message: `Added ${newPerson.name}`,
+            message: `${newPerson.name} has been added to your phone book.`,
             type: "notification",
           });
 
@@ -78,6 +92,7 @@ const App = () => {
           }, 5000);
         })
         .catch((err) => {
+          // console.log(err)
           setNotification({
             message: `${err.response.data.error}`,
             type: "error",
@@ -107,17 +122,30 @@ const App = () => {
 
   const handleDelete = (e) => {
     const id = e.target.id;
-    const person = persons.find((person) => person.id === id);
-    const name = person.name;
-    console.log(persons);
+    const name = e.target.name;
+
     if (window.confirm(`Delete ${name} ?`)) {
-      const newPersons = persons.filter((person) => person.id !== id);
+      // const newPersons = persons.filter((person) => person.id !== id);
       personService
         .del(id)
-        .then(() => {
-          setPersons([...newPersons]);
+        .then((deleted) => {
+          setNotification({
+            message: `Information of ${name} has been deleted from phonebook`,
+            type: "error",
+          });
+          
+          setTimeout(() => {
+            setNotification({
+              message: null,
+              type: null,
+            });
+          }, 5000);
+
+          //reset persons
+          setPersons(persons.filter((person) => person.id !== id))
         })
         .catch((err) => {
+          console.log(err)
           setNotification({
             message: `Information of ${name} has been already deleted from the server`,
             type: "error",
@@ -129,6 +157,9 @@ const App = () => {
               type: null,
             });
           }, 5000);
+
+          //set persons again after deletion
+          setPersons(persons.filter(person => person.id !== id))
         });
     }
   };
