@@ -1,13 +1,26 @@
-GET http://localhost:3001/api/blogs
+GET http://localhost:3001/api/blogs/
 
 ###
-POST http://localhost:3001/api/blogs
-
+POST http://localhost:3001/api/blogs/
 Content-Type: application/json
 
 {
-    "author": "sarang wadode",
-    "title": "my first blog",
-    "url": "http://blogs/sarangwadode/firstblog",
-    "likes": 123 
+    "author": "temp",
+    "title": "temp title",
+    "url": "http://blogs/temp/firstblog",
+    "likes": 4566
+}
+
+###
+DELETE http://localhost:3001/api/blogs/6348565673bd7505d74f175c
+
+###
+PUT http://localhost:3001/api/blogs/6348565673bd7505d74f175c
+Content-Type: application/json
+
+{
+    "author": "temp check",
+    "title": "temp title",
+    "url": "http://blogs/temp/firstblog",
+    "likes": 7895
 }
